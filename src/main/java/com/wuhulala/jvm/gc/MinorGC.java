@@ -17,7 +17,7 @@ public class MinorGC {
         allocation1 = new byte[_1MB * 2];
         allocation2 = new byte[_1MB * 2];
         allocation3 = new byte[_1MB * 2];
-        allocation4 = new byte[_1MB * 5]; //出现一次MinorGC
+        allocation4 = new byte[_1MB * 4]; //出现一次MinorGC
 
     }
 
@@ -78,6 +78,20 @@ public class MinorGC {
     // 所以allocation1 allocation2 allocation3 直接进入老年代
     // 在老年代的是allocation1 、allocation2、 allocation3 内存占6M
     // 在新生代的时候是新的allocation4 内存占4M
+
+    //Heap 加入参数：-XX:PretenureSizeThreshold=3145728
+    //配置一个内存阀值，大于这个值的对象直接分配在老年代之中。
+    //def new generation   total 9216K, used 7348K [0x331b0000, 0x33bb0000, 0x33bb0000)
+    //eden space 8192K,  89% used [0x331b0000, 0x338dd0b8, 0x339b0000)
+    //from space 1024K,   0% used [0x339b0000, 0x339b0000, 0x33ab0000)
+    //to   space 1024K,   0% used [0x33ab0000, 0x33ab0000, 0x33bb0000)
+    //tenured generation   total 10240K, used 4096K [0x33bb0000, 0x345b0000, 0x345b0000)
+    //the space 10240K,  40% used [0x33bb0000, 0x33fb0010, 0x33fb0200, 0x345b0000)
+    //compacting perm gen  total 12288K, used 185K [0x345b0000, 0x351b0000, 0x385b0000)
+    //the space 12288K,   1% used [0x345b0000, 0x345de658, 0x345de800, 0x351b0000)
+    //ro space 10240K,  45% used [0x385b0000, 0x38a37290, 0x38a37400, 0x38fb0000)
+    //rw space 12288K,  54% used [0x38fb0000, 0x3963ace8, 0x3963ae00, 0x39bb0000)
+
 
 
 }
