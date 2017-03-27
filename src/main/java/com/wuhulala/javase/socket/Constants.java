@@ -1,5 +1,7 @@
 package com.wuhulala.javase.socket;
 
+import java.io.File;
+
 /**
  * 常量类
  *
@@ -9,6 +11,10 @@ package com.wuhulala.javase.socket;
  * @link https://github.com/wuhulala
  */
 public interface Constants {
+    //测试文件地址
+    String TEST_FILE_PATH = "F:"+File.separator+"test.txt";
+    //文件接收地址
+    String RECEIVE_DIR = "D:"+ File.separator+"test"+File.separator;
     //关闭服务器命令
     static final String SHUTDOWN_COMMAND = "sd";
     //接收开始命令

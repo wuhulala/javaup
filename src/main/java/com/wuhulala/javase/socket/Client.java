@@ -2,10 +2,7 @@ package com.wuhulala.javase.socket;
 
 import com.wuhulala.utils.BaseLog;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -16,6 +13,10 @@ import java.net.Socket;
  */
 public class Client extends BaseLog {
     public static void main(String[] args) {
+        createSocket();
+    }
+
+    private static void createSocket() {
         try {
             Socket socket = new Socket("127.0.0.1", 8888);
             doProcess(socket);
@@ -28,17 +29,23 @@ public class Client extends BaseLog {
         boolean shutdown = false;
         InputStream input;
         OutputStream out;
-        int count = 0 ;
+        int count = 0;
         while (!shutdown) {
             try {
                 input = socket.getInputStream();
                 out = socket.getOutputStream();
-                if(count == 0 ) {
+                if (count == 0) {
                     //发送准备接收报文
                     out.write(Constants.RECEIVE_OK_COMMAND.getBytes());
-                    count ++;
+                    count++;
                 }
                 doReceive(input);
+                out.write(Constants.RECEIVE_END_COMMAND.getBytes());
+                //发送准备接收报文
+                //out.write(Constants.RECEIVE_OK_COMMAND.getBytes());
+                //logger.debug("第二次接收----------------");
+                //doReceive(input);
+
             } catch (Exception e) {
                 shutdown = true;
                 logger.error("发生未知错误!关闭自己！！！！", e);
@@ -46,24 +53,36 @@ public class Client extends BaseLog {
         }
     }
 
-    private static void doReceive(InputStream input) throws UnsupportedEncodingException {
-        StringBuilder request = new StringBuilder(2048);
-
-        int i = 0;
-        byte[] buffer = new byte[2048];
-        try {
-            i = input.read(buffer);
-        } catch (IOException e) {
-            logger.error(">>>>>>>>>>>>>>解析错误<<<<<<<<<<<<<<<", e);
-        }
-
-        for (int j = 0; j < i; j++) {
-            request.append((char) buffer[j]);
-        }
-        String result = request.toString();
+    private static void doReceive(InputStream input) throws IOException {
         logger.debug(">>>>>>>>>>>>>>客户端接收开始<<<<<<<<<<<<<<<");
-        System.out.println(new String(result.getBytes(), "GBK"));
-        logger.debug(">>>>>>>>>>>>>>客户端接收完成<<<<<<<<<<<<<<<");
+        try (FileOutputStream outputStream =
+                     new FileOutputStream(new File(Constants.RECEIVE_DIR + File.separator + "test.txt"))) {
+            byte[] buf = new byte[1024];
+            int bytesRead;
 
+            while ((bytesRead = input.read(buf)) > 0) {
+                if (isNotEndCommand(buf,bytesRead)) {
+                    outputStream.write(buf, 0, bytesRead);
+                }else{
+                    break;
+                }
+            }
+        }
+        logger.debug(">>>>>>>>>>>>>>客户端接收完成<<<<<<<<<<<<<<<");
+    }
+
+    /**
+     * 判断报文是否是
+     *
+     * @param buffer
+     * @return
+     */
+    public static boolean isNotEndCommand(byte[] buffer,int bytesRead) {
+        if (bytesRead != Constants.SEND_END_COMMAND.getBytes().length) return true;
+        StringBuilder request = new StringBuilder(2048);
+        for (int  i = 0 ; i < bytesRead ; i++) {
+            request.append((char) buffer[i]);
+        }
+        return !Constants.SEND_END_COMMAND.equals(request.toString());
     }
 }

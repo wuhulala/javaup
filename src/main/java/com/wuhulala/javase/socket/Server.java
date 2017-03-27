@@ -2,9 +2,7 @@ package com.wuhulala.javase.socket;
 
 import com.wuhulala.utils.BaseLog;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -15,7 +13,6 @@ import java.net.Socket;
  * @link https://github.com/wuhulala
  */
 public class Server extends BaseLog {
-
 
 
     public static void main(String[] args) {
@@ -39,36 +36,72 @@ public class Server extends BaseLog {
             while (!shutdown) {
                 socket = serverSocket.accept();
                 input = socket.getInputStream();
-                out = socket.getOutputStream();
                 //处理报文
                 String message = processClientMessage(input);
 
-                switch (message){
+                switch (message) {
                     case Constants.SHUTDOWN_COMMAND:
                         shutdown = true;
                         break;
                     case Constants.RECEIVE_OK_COMMAND:
-                        doSend(out);
+                        doSend(socket);
+                        break;
+                    case Constants.RECEIVE_END_COMMAND:
+                        socket.close();
                         break;
                     default:
                         logger.warn("报文解析失败。。。。丢掉");
                         break;
                 }
             }
-        }catch (Exception e){
-            logger.error("接受参数错误。。。",e);
+        } catch (Exception e) {
+            logger.error("接受参数错误。。。", e);
         }
     }
 
     /**
      * 发送文件到客户端
-     * @param out
+     *
+     * @param socket
      */
-    private static void doSend(OutputStream out) throws IOException {
-        logger.debug("<==========开始发送文件========>");
-        String message = "File---XX";
-        out.write(message.getBytes());
-        logger.debug("<==========发送文件结束========>");
+    private static void doSend(Socket socket) throws IOException {
+        OutputStream out = socket.getOutputStream();
+        boolean shutdown = false;
+        try (FileInputStream inputStream = new FileInputStream(new File(Constants.TEST_FILE_PATH))) {
+            logger.debug("<==========开始发送文件========>");
+            byte[] buffer = new byte[2048];
+            while (inputStream.read(buffer) != -1) {
+                out.write(buffer);
+            }
+            out.flush();
+            out.write(Constants.SEND_END_COMMAND.getBytes());
+            out.flush();
+            logger.debug("<==========发送文件结束========>");
+
+            while (true) {
+                //处理报文
+                String message = processClientMessage(socket.getInputStream());
+
+                //如果是空说明客户端断开
+                if("".equals(message)){
+                    socket.close();
+                    break;
+                }
+
+                if (Constants.RECEIVE_OK_COMMAND.equals(message)) {
+                    break;
+                } else if (Constants.RECEIVE_END_COMMAND.equals(message)) {
+                    logger.info("客户端接收文件成功:继续监控");
+                } else {
+                    logger.warn("报文解析失败。。。。丢掉[:" + message + "]");
+                }
+            }
+            if(socket.isConnected()) {
+                doSend(socket);
+            }
+        } catch (IOException e) {
+            logger.error("发送文件失败", e);
+        }
     }
 
     private static String processClientMessage(InputStream input) {
@@ -80,12 +113,12 @@ public class Server extends BaseLog {
         try {
             i = input.read(buffer);
         } catch (IOException e) {
-            logger.error(">>>>>>>>>>>>>>解析错误<<<<<<<<<<<<<<<",e);
+            logger.error(">>>>>>>>>>>>>>解析错误<<<<<<<<<<<<<<<", e);
             System.out.println(e.getMessage());
         }
 
         for (int j = 0; j < i; j++) {
-            request.append((char)buffer[j]);
+            request.append((char) buffer[j]);
         }
         String result = request.toString();
         logger.debug(">>>>>>>>>>>>>>解析报文结果<<<<<<<<<<<<<<<");
