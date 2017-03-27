@@ -66,7 +66,7 @@ public class Server extends BaseLog {
      */
     private static void doSend(OutputStream out) throws IOException {
         logger.debug("<==========开始发送文件========>");
-        String message = "文件XXX";
+        String message = "File---XX";
         out.write(message.getBytes());
         logger.debug("<==========发送文件结束========>");
     }
