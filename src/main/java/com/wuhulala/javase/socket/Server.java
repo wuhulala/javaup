@@ -12,7 +12,7 @@ import java.net.Socket;
  * @date 2017/3/27
  * @link https://github.com/wuhulala
  */
-public class Server extends BaseLog {
+public class Server implements BaseLog {
 
 
     public static void main(String[] args) {
@@ -36,14 +36,17 @@ public class Server extends BaseLog {
             while (!shutdown) {
                 socket = serverSocket.accept();
                 input = socket.getInputStream();
+                out = socket.getOutputStream();
+
                 //处理报文
-                String message = processClientMessage(input);
+                String message = MessageUtils.processClientMessage(input);
 
                 switch (message) {
                     case Constants.SHUTDOWN_COMMAND:
                         shutdown = true;
                         break;
                     case Constants.RECEIVE_OK_COMMAND:
+                        logger.debug("获取到确定 写入信息");
                         doSend(socket);
                         break;
                     case Constants.RECEIVE_END_COMMAND:
@@ -80,7 +83,7 @@ public class Server extends BaseLog {
 
             while (true) {
                 //处理报文
-                String message = processClientMessage(socket.getInputStream());
+                String message = MessageUtils.processClientMessage(socket.getInputStream());
 
                 //如果是空说明客户端断开
                 if("".equals(message)){
@@ -103,29 +106,5 @@ public class Server extends BaseLog {
             logger.error("发送文件失败", e);
         }
     }
-
-    private static String processClientMessage(InputStream input) {
-        StringBuilder request = new StringBuilder(2048);
-
-        int i = 0;
-        byte[] buffer = new byte[2048];
-
-        try {
-            i = input.read(buffer);
-        } catch (IOException e) {
-            logger.error(">>>>>>>>>>>>>>解析错误<<<<<<<<<<<<<<<", e);
-            System.out.println(e.getMessage());
-        }
-
-        for (int j = 0; j < i; j++) {
-            request.append((char) buffer[j]);
-        }
-        String result = request.toString();
-        logger.debug(">>>>>>>>>>>>>>解析报文结果<<<<<<<<<<<<<<<");
-        System.out.println(result);
-        logger.debug(">>>>>>>>>>>>>>解析报文结果<<<<<<<<<<<<<<<");
-        return result;
-    }
-
 
 }

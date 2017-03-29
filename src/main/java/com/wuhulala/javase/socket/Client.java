@@ -11,7 +11,7 @@ import java.net.Socket;
  * @date 2017/3/27
  * @link https://github.com/wuhulala
  */
-public class Client extends BaseLog {
+public class Client implements BaseLog {
     public static void main(String[] args) {
         createSocket();
     }
@@ -34,13 +34,16 @@ public class Client extends BaseLog {
             try {
                 input = socket.getInputStream();
                 out = socket.getOutputStream();
-                if (count == 0) {
-                    //发送准备接收报文
-                    out.write(Constants.RECEIVE_OK_COMMAND.getBytes());
-                    count++;
+                out.write(Constants.RECEIVE_OK_COMMAND.getBytes());
+                String message = MessageUtils.processClientMessage(input);
+                if("".equals(message)){
+                    logger.warn("无效报文 抛弃之。。。");
+                }else if(Constants.SEND_OK_COMMAND.equals(message)){
+                    out.write(Constants.RECEIVE_START_COMMAND.getBytes());
+                    Thread.sleep(500);
+                    doReceive(input);
+                    out.write(Constants.RECEIVE_END_COMMAND.getBytes());
                 }
-                doReceive(input);
-                out.write(Constants.RECEIVE_END_COMMAND.getBytes());
                 //发送准备接收报文
                 //out.write(Constants.RECEIVE_OK_COMMAND.getBytes());
                 //logger.debug("第二次接收----------------");
@@ -55,8 +58,10 @@ public class Client extends BaseLog {
 
     private static void doReceive(InputStream input) throws IOException {
         logger.debug(">>>>>>>>>>>>>>客户端接收开始<<<<<<<<<<<<<<<");
-        try (FileOutputStream outputStream =
-                     new FileOutputStream(new File(Constants.RECEIVE_DIR + File.separator + "test.txt"))) {
+        FileOutputStream outputStream = null;
+        try  {
+             outputStream=
+                    new FileOutputStream(new File(Constants.RECEIVE_DIR + File.separator + "test.txt"));
             byte[] buf = new byte[1024];
             int bytesRead;
 
@@ -66,6 +71,12 @@ public class Client extends BaseLog {
                 }else{
                     break;
                 }
+            }
+        }catch (Exception e){
+            logger.error("asdasdasd",e);
+        }finally {
+            if (outputStream != null) {
+                outputStream.close();
             }
         }
         logger.debug(">>>>>>>>>>>>>>客户端接收完成<<<<<<<<<<<<<<<");

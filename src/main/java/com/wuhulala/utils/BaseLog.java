@@ -10,6 +10,6 @@ import org.slf4j.LoggerFactory;
  * @date 2017/3/27
  * @link https://github.com/wuhulala
  */
-public abstract class BaseLog {
-    public static final Logger logger = LoggerFactory.getLogger(BaseLog.class);
+public interface BaseLog {
+    Logger logger = LoggerFactory.getLogger(BaseLog.class);
 }
