@@ -29,18 +29,21 @@ public class Client implements BaseLog {
         boolean shutdown = false;
         InputStream input;
         OutputStream out;
-        int count = 0;
+        boolean firstCome = true;
         while (!shutdown) {
             try {
                 input = socket.getInputStream();
                 out = socket.getOutputStream();
-                out.write(Constants.RECEIVE_OK_COMMAND.getBytes());
+                if(firstCome){
+                    MessageUtils.doSendMessage(socket,Constants.RECEIVE_OK_COMMAND);
+                    firstCome = false;
+                }
                 String message = MessageUtils.processClientMessage(input);
                 if("".equals(message)){
                     logger.warn("无效报文 抛弃之。。。");
                 }else if(Constants.SEND_OK_COMMAND.equals(message)){
-                    out.write(Constants.RECEIVE_START_COMMAND.getBytes());
-                    Thread.sleep(500);
+                    MessageUtils.doSendMessage(socket,Constants.RECEIVE_START_COMMAND);
+                    //Thread.sleep(500);
                     doReceive(input);
                     out.write(Constants.RECEIVE_END_COMMAND.getBytes());
                 }

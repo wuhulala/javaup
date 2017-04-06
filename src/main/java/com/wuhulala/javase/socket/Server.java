@@ -19,7 +19,10 @@ public class Server implements BaseLog {
         try {
             ServerSocket serverSocket = new ServerSocket(8888);
             logger.debug("------------------服务器启动成功---------------");
-            doProcess(serverSocket);
+            while(true) {
+                Socket socket = serverSocket.accept();
+                doProcess(socket);
+            }
         } catch (IOException e) {
             System.out.println("启动服务出错。。。");
             e.printStackTrace();
@@ -27,14 +30,12 @@ public class Server implements BaseLog {
 
     }
 
-    private static void doProcess(ServerSocket serverSocket) {
+    private static void doProcess(Socket socket) {
         boolean shutdown = false;
-        Socket socket;
         InputStream input;
         OutputStream out;
         try {
             while (!shutdown) {
-                socket = serverSocket.accept();
                 input = socket.getInputStream();
                 out = socket.getOutputStream();
 
@@ -47,6 +48,10 @@ public class Server implements BaseLog {
                         break;
                     case Constants.RECEIVE_OK_COMMAND:
                         logger.debug("获取到确定 写入信息");
+                        MessageUtils.doSendMessage(socket,Constants.SEND_OK_COMMAND);
+                        break;
+                    case Constants.RECEIVE_START_COMMAND:
+                        logger.debug("获取到接受开始信息，开始写入信息");
                         doSend(socket);
                         break;
                     case Constants.RECEIVE_END_COMMAND:
@@ -61,6 +66,8 @@ public class Server implements BaseLog {
             logger.error("接受参数错误。。。", e);
         }
     }
+
+
 
     /**
      * 发送文件到客户端

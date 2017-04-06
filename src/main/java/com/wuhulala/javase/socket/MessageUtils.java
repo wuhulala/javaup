@@ -4,6 +4,8 @@ import com.wuhulala.utils.BaseLog;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
 
 /**
  * @author xueah20964
@@ -31,5 +33,11 @@ public class MessageUtils  implements BaseLog{
         System.out.println(result);
         logger.debug(">>>>>>>>>>>>>>解析报文结果<<<<<<<<<<<<<<<");
         return result;
+    }
+
+    public synchronized static void  doSendMessage(Socket socket, String message) throws IOException {
+        OutputStream out = socket.getOutputStream();
+        out.write(message.getBytes());
+        out.flush();
     }
 }
