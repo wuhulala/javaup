@@ -1,6 +1,7 @@
 package com.wuhulala.javase.proxy;
 
 import net.sf.cglib.beans.BeanGenerator;
+import net.sf.cglib.core.DebuggingClassWriter;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
@@ -24,7 +25,7 @@ class SampleClass {
 public class CglibTest {
     public static void main(String[] args) throws Exception {
         //生成类
-        //System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "target/cglib");
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "target/cglib");
        /* while(true) {
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(SampleClass.class);
@@ -52,7 +53,7 @@ public class CglibTest {
         for(int i=0;i<100000;i++){
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(SampleClass.class);
-            enhancer.setUseCache(false);// 关闭CGLib缓存，否则总是生成同一个类
+            //enhancer.setUseCache(false);// 关闭CGLib缓存，否则总是生成同一个类
 
             enhancer.setCallback(new MethodInterceptor(){
                 @Override
