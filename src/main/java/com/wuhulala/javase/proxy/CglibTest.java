@@ -25,7 +25,7 @@ class SampleClass {
 public class CglibTest {
     public static void main(String[] args) throws Exception {
         //生成类
-        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "target/cglib");
+        System.setProperty(DebuggingClassWriter.DEBUG_LOCATION_PROPERTY, "cglib");
        /* while(true) {
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(SampleClass.class);
@@ -50,7 +50,7 @@ public class CglibTest {
         //-XX:PermSize=5M -XX:MaxPermSize=7M  jdk1.7
         //20M 3034 在加上原装的类 有3111个
         System.out.println("Let us do it now.....");
-        for(int i=0;i<100000;i++){
+        //for(int i=0;i<100000;i++){
             Enhancer enhancer = new Enhancer();
             enhancer.setSuperclass(SampleClass.class);
             //enhancer.setUseCache(false);// 关闭CGLib缓存，否则总是生成同一个类
@@ -58,10 +58,10 @@ public class CglibTest {
             enhancer.setCallback(new MethodInterceptor(){
                 @Override
                 public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-                    //System.out.println("before");
+                    System.out.println("before");
                     Object result = methodProxy.invokeSuper(o, objects);
-                    //System.out.println(result);
-                    //System.out.println("after");
+                    System.out.println(result);
+                    System.out.println("after");
                     return result;
                 }
 
@@ -71,9 +71,27 @@ public class CglibTest {
 
             SampleClass clazz = (SampleClass) enhancer.create();
 
-            System.out.println("Time:" + System.currentTimeMillis()+"--------------------------第"+i+"个类");
-        }
+            clazz.test("asd");
+
+            //System.out.println("Time:" + System.currentTimeMillis()+"--------------------------第"+i+"个类");
+        //}
     }
+
+
+//    反编译Test
+//    public final String test(String paramString)
+//    {
+//        MethodInterceptor tmp4_1 = this.CGLIB$CALLBACK_0;
+//        if (tmp4_1 == null)
+//        {
+//            tmp4_1;
+//            CGLIB$BIND_CALLBACKS(this);
+//        }
+//        MethodInterceptor tmp17_14 = this.CGLIB$CALLBACK_0;
+//        if (tmp17_14 != null)
+//            return (String)tmp17_14.intercept(this, CGLIB$test$0$Method, new Object[] { paramString }, CGLIB$test$0$Proxy);
+//        return super.test(paramString);
+//    }
 
     @Test
     public void testBeanGenerator() throws Exception {
