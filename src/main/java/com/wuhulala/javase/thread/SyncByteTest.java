@@ -1,8 +1,6 @@
 package com.wuhulala.javase.thread;
 
 /**
- * 查看synchronize的字节码 //monitorenter - monitorexit
- *
  * @author xueaohui
  * @version 1.0
  * @date 2017/4/16
