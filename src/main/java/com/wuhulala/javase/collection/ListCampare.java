@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Random;
 
 /**
+ * 32位jvm 会内存溢出
+ *
  * @author xueaohui
  * @version 1.0
  * @date 2017/3/26
@@ -15,8 +17,8 @@ public class ListCampare {
     public static void main(String[] args) {
         Random random = new Random();
 
-        List arrayList = new ArrayList();
-        List linkedList = new LinkedList();
+        List<Integer> arrayList = new ArrayList<>();
+        List<Integer> linkedList = new LinkedList<>();
         for (int i = 0; i < 10000000; i++) {
             arrayList.add(1);
         }
@@ -27,6 +29,8 @@ public class ListCampare {
         System.out.println("初始化ArrayList与LinkList成功");
         long begin1 = System.currentTimeMillis();
         for (int i = 0; i < 10000000; i++) {
+            if(i % 10000 == 0) System.out.println("--------------我还活着-----------------");
+
             if(random.nextBoolean()) {
                 arrayList.set(random.nextInt(10000000), 10);
             }else {
@@ -37,6 +41,7 @@ public class ListCampare {
         System.out.println("ArrayList: " + (end1 - begin1) + " ms");
         long begin2 = System.currentTimeMillis();
         for (int i = 0; i < 10000000; i++) {
+            if(i % 10000 == 0) System.out.println("--------------我还活着-----------------");
             if(random.nextBoolean()) {
                 linkedList.set(random.nextInt(10000000), 10);
             }else {
