@@ -1,6 +1,6 @@
 package com.wuhulala.javase.nio;
 
-import com.wuhulala.UTF8Utils;
+import com.wuhulala.javase.UTF8Utils;
 import org.junit.Test;
 
 import java.io.IOException;

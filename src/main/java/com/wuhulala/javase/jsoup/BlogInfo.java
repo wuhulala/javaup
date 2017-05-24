@@ -1,5 +1,8 @@
 package com.wuhulala.javase.jsoup;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 /**
  * Created by xueah20964 on 2017/5/24.
  */
@@ -40,8 +43,9 @@ public class BlogInfo {
 
     @Override
     public String toString() {
-
-        return "BlogInfo{" +
+        LocalDateTime now = LocalDateTime.now();
+        String date = now.format(DateTimeFormatter.BASIC_ISO_DATE);
+        return date+"{" +
                 "score=" + score +
                 ", rankNum=" + rankNum +
                 ", readNum=" + readNum +
