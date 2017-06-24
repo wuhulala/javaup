@@ -11,5 +11,6 @@ import org.slf4j.LoggerFactory;
  * @link https://github.com/wuhulala
  */
 public interface BaseLog {
+    //其实这种方式是不严格的，但是为了方便。。。。
     Logger logger = LoggerFactory.getLogger(BaseLog.class);
 }
