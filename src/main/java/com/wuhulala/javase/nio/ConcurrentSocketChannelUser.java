@@ -9,18 +9,19 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.Scanner;
 
 /**
  * Created by xueah20964 on 2017/5/23.
  */
-public class SocketChannelUser {
+public class ConcurrentSocketChannelUser {
 
     private Selector selector = null;
     private SocketChannel socketChannel = null;
     private String name;
     public static void main(String[] args) throws IOException, InterruptedException {
-        new  SocketChannelUser("lisi").init();
+        for (int i = 0; i < 10; i++) {
+            new Thread(new TestClient()).start();
+        }
     }
 
     public static class TestClient implements Runnable{
@@ -28,7 +29,7 @@ public class SocketChannelUser {
         public void run() {
             for (int i = 0; i < 10; i++) {
                 try {
-                    new SocketChannelUser(Thread.currentThread().getName()+ "[" + i + "]").init();
+                    new ConcurrentSocketChannelUser(Thread.currentThread().getName()+ "[" + i + "]").init();
                 } catch (IOException e) {
                     System.out.println(Thread.currentThread().getName() + "--------------" + i );
                     //e.printStackTrace();
@@ -37,7 +38,7 @@ public class SocketChannelUser {
         }
     }
 
-    public SocketChannelUser(String name) {
+    public ConcurrentSocketChannelUser(String name) {
         this.name = name;
     }
 
@@ -61,18 +62,12 @@ public class SocketChannelUser {
         buf.put(newData.getBytes());
         buf.flip();
         socketChannel.write(buf);
+        buf.clear();
+        socketChannel.write(UTF8Utils.encode("lisi:nihao"));
 
         //-----------打开自己的读取功能----------------
         new Thread(new ReadThread()).start();
 
-        // 创建键盘输入流
-        Scanner scan = new Scanner(System.in);
-        while (scan.hasNextLine()) {
-            // 读取键盘输入
-            String line = scan.nextLine();
-            // 将键盘输入的内容输出到SocketChannel中
-            socketChannel.write(UTF8Utils.encode(name+":"+line));
-        }
     }
 
     public class ReadThread implements Runnable{

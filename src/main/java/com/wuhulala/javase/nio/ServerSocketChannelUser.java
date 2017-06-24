@@ -36,12 +36,17 @@ public class ServerSocketChannelUser {
 
         try {
             assert selector != null;
+            int count = 0;
             while (selector.select() > 0) {
-                for (SelectionKey sk : selector.selectedKeys()) {
-                    selector.selectedKeys().remove(sk);
-                    if (sk.isValid() && sk.isAcceptable()) {
+                System.out.println("-------------" + ++count + "------------------");
+                java.util.Iterator<SelectionKey> it = selector.selectedKeys().iterator();// Get an iterator over the set of selected keys
+
+                while (it.hasNext()) {
+                    SelectionKey sk = it.next();
+                    System.out.println(sk.interestOps());
+                    if (sk.isAcceptable()) {
                         // 如果这个key是可以接收客户端请求的
-                        assert ssc != null;
+                        ssc = (ServerSocketChannel) sk.channel();
                         SocketChannel sc = ssc.accept();
                         sc.configureBlocking(false);
                         try {
@@ -49,7 +54,8 @@ public class ServerSocketChannelUser {
                         } catch (ClosedChannelException e) {
                             System.out.println("客户端关闭了：" + e.getMessage());
                         }
-                    } else if (sk.isValid() && sk.isReadable()) {
+                    }
+                    if (sk.isReadable()) {
                         SocketChannel sc = null;
                         try {
                             sc = (SocketChannel) sk.channel();
@@ -61,6 +67,7 @@ public class ServerSocketChannelUser {
                             System.out.println("e 3" + e.getMessage());
                         }
                     }
+                    it.remove();
                 }
             }
         } catch (IOException e) {
@@ -92,7 +99,7 @@ public class ServerSocketChannelUser {
                 sc.write(UTF8Utils.encode("进入聊天室成功！！！你好" + username));
             } else {
                 String[] users = username.split(":");
-                if(users.length == 3) {
+                if (users.length == 3) {
                     SocketAddress address = nameAddress.get(users[1]);
                     if (address != null) {
                         SocketChannel socketChannel = addressChannel.get(address);
@@ -105,7 +112,7 @@ public class ServerSocketChannelUser {
                     } else {
                         sc.write(UTF8Utils.encode("他不在线。。"));
                     }
-                }else{
+                } else {
                     sc.write(UTF8Utils.encode("输入信息无效。。"));
                 }
             }
