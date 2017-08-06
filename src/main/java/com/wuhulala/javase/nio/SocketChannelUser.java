@@ -9,7 +9,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
-import java.util.Scanner;
 
 /**
  * Created by xueah20964 on 2017/5/23.
@@ -20,13 +19,15 @@ public class SocketChannelUser {
     private SocketChannel socketChannel = null;
     private String name;
     public static void main(String[] args) throws IOException, InterruptedException {
-        new  SocketChannelUser("lisi").init();
+        //new  SocketChannelUser("lisi").init();
+        new Thread(new TestClient()).start();
     }
 
     public static class TestClient implements Runnable{
         @Override
         public void run() {
-            for (int i = 0; i < 10; i++) {
+            System.out.println("asdasdasd");
+            for (int i = 0; i < 1000000000; i++) {
                 try {
                     new SocketChannelUser(Thread.currentThread().getName()+ "[" + i + "]").init();
                 } catch (IOException e) {
@@ -56,7 +57,7 @@ public class SocketChannelUser {
 
         //------------ 注册自己的存在------------------
         String newData = name;
-        ByteBuffer buf = ByteBuffer.allocate(480);
+        ByteBuffer buf = ByteBuffer.allocateDirect(480);
         buf.clear();
         buf.put(newData.getBytes());
         buf.flip();
@@ -66,13 +67,13 @@ public class SocketChannelUser {
         new Thread(new ReadThread()).start();
 
         // 创建键盘输入流
-        Scanner scan = new Scanner(System.in);
-        while (scan.hasNextLine()) {
-            // 读取键盘输入
-            String line = scan.nextLine();
-            // 将键盘输入的内容输出到SocketChannel中
-            socketChannel.write(UTF8Utils.encode(name+":"+line));
-        }
+//        Scanner scan = new Scanner(System.in);
+//        while (scan.hasNextLine()) {
+//            // 读取键盘输入
+//            String line = scan.nextLine();
+//            // 将键盘输入的内容输出到SocketChannel中
+//            socketChannel.write(UTF8Utils.encode(name+":"+line));
+//        }
     }
 
     public class ReadThread implements Runnable{
@@ -86,7 +87,7 @@ public class SocketChannelUser {
                         // 如果该SelectionKey对应的Channel中有可读的数据
                         if (sk.isReadable()) {
                             SocketChannel sc = (SocketChannel) sk.channel();
-                            ByteBuffer buff = ByteBuffer.allocate(1024);
+                            ByteBuffer buff = ByteBuffer.allocateDirect(1024);
                             String content = "";
                             while (sc.read(buff) > 0) {
                                 buff.flip();
