@@ -11,7 +11,7 @@ import java.util.concurrent.Semaphore;
  * description: 测试信号量
  */
 public class SemaphoreTest implements Runnable{
-    public static Semaphore sema = new Semaphore(5);
+    private static Semaphore sema = new Semaphore(5);
 
     @Override
     public void run() {
