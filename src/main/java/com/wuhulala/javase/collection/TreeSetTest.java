@@ -19,6 +19,8 @@ public class TreeSetTest {
     private static final Logger logger = LoggerFactory.getLogger(TreeSetTest.class);
 
     public static void main(String[] args) {
+
+        // HashSet的底层是HashMap
         Set<String> hashSet = new HashSet<>();
 
         hashSet.add("1");
@@ -39,6 +41,7 @@ public class TreeSetTest {
 //        3
 //        21:11:46,513 DEBUG com.wuhulala.javase.collection.TreeSetTest (53) - ======= print end ==========
 
+        //TreeSet的底层是TreeMap（底层是红黑树）
         Set<String> treeSet = new TreeSet<>(String::compareTo);
 
         treeSet.add("1");
