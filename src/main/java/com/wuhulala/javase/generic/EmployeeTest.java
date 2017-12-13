@@ -25,4 +25,19 @@ public class EmployeeTest {
         Employee second = p.getSecond();
         System.out.println(first.getName() + " and " + second.getName() + " are buddies");
     }
+
+    public static void swap(Pair<?> p){
+//        ERROR  用通配符是不可以获取这个的类型的，可以新建一个辅助方法，
+//        如下，你瞅瞅，问号获取不到是不是就不行了？ 不是的 使用泛型就好了
+//        ? t = p.getFirst();
+//        p.setFirst(p.getSecond());
+//        p.setSecond(t);
+        swapHelper(p);
+    }
+
+    public static<T> void swapHelper(Pair<T> p){
+        T t = p.getFirst();
+        p.setFirst(p.getSecond());
+        p.setSecond(t);
+    }
 }
