@@ -89,7 +89,7 @@ public class CglibTest {
 //        }
 //        MethodInterceptor tmp17_14 = this.CGLIB$CALLBACK_0;
 //        if (tmp17_14 != null)
-//            return (String)tmp17_14.intercept(this, CGLIB$test$0$Method, new Object[] { paramString }, CGLIB$test$0$Proxy);
+//            return (String)tmp17_14.intercept(this, CGLIB$test$0$Method, new Object[] { paramString }, CGLIB$test$0$com.wuhulala.proxy.Proxy);
 //        return super.test(paramString);
 //    }
 
