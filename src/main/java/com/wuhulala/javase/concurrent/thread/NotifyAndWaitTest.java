@@ -46,7 +46,8 @@ public class NotifyAndWaitTest {
             synchronized (object) {
                 System.out.println(System.currentTimeMillis() + ": T2 Start");
                 System.out.println(System.currentTimeMillis() + ": T2 start!!! notify one object");
-                object.notify();
+                object.notifyAll();
+                //object.notify();
                 System.out.println(System.currentTimeMillis() + ": T2 end");
                 try {
                     Thread.sleep(2000);

@@ -6,8 +6,8 @@ import java.util.concurrent.TimeUnit;
  * author： wuhulala
  * date： 2017/8/6
  * version: 1.0
- * description: 在普通方法添加不可重入锁
- *  synchronized 的本质就是一个不可重入锁，加锁的粒度和本质大致有
+ * description: 在普通方法添加锁  可重入就意味着：线程可以进入任何一个它已经拥有的锁所同步着的代码块。
+ *  synchronized 的本质就是可重入锁，加锁的粒度和本质大致有
  *   1. 有对象锁 synchronized(this),或者非静态方法上加synchronized修饰
  *   2. 类锁 synchronized(XX.class),或者静态方法上加synchronized修饰
  *

@@ -22,6 +22,11 @@ class SampleClass {
         return "Hello world!";
     }
 }
+
+interface SampleInterface {
+    public String test(String input);
+}
+
 public class CglibTest {
     public static void main(String[] args) throws Exception {
         //生成类
@@ -45,35 +50,39 @@ public class CglibTest {
             proxy.test(null);
         }*/
 
-       //5M 836个类
+        //5M 836个类
         //-XX:MetaspaceSize=5M -XX:MaxMetaspaceSize=7M jdk1.8
         //-XX:PermSize=5M -XX:MaxPermSize=7M  jdk1.7
         //20M 3034 在加上原装的类 有3111个
         System.out.println("Let us do it now.....");
         //for(int i=0;i<100000;i++){
-            Enhancer enhancer = new Enhancer();
-            enhancer.setSuperclass(SampleClass.class);
-            //enhancer.setUseCache(false);// 关闭CGLib缓存，否则总是生成同一个类
+        Enhancer enhancer = new Enhancer();
+        //enhancer.setUseCache(false);// 关闭CGLib缓存，否则总是生成同一个类
+        Class clazz = new JDKProxyTest(new B()).instance().getClass();
+        enhancer.setSuperclass(clazz);
 
-            enhancer.setCallback(new MethodInterceptor(){
-                @Override
-                public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
-                    System.out.println("before");
-                    Object result = methodProxy.invokeSuper(o, objects);
-                    System.out.println(result);
-                    System.out.println("after");
-                    return result;
-                }
-
-
-            });
+        enhancer.setCallback(new MethodInterceptor() {
+            @Override
+            public Object intercept(Object o, Method method, Object[] objects, MethodProxy methodProxy) throws Throwable {
+                System.out.println("cglib before");
+                Object result = methodProxy.invokeSuper(o, objects);
+                System.out.println(result);
+                System.out.println("cglib after");
+                return result;
+            }
 
 
-            SampleClass clazz = (SampleClass) enhancer.create();
+        });
 
-            clazz.test("asd");
 
-            //System.out.println("Time:" + System.currentTimeMillis()+"--------------------------第"+i+"个类");
+
+        A instance = (A) enhancer.create();
+
+        instance.sayHelloWorld();
+        //Exception in thread "main" java.lang.IllegalArgumentException: Cannot subclass final class com.wuhulala.javase.proxy.$Proxy0
+        //通过代理链的方式
+
+        //System.out.println("Time:" + System.currentTimeMillis()+"--------------------------第"+i+"个类");
         //}
     }
 
