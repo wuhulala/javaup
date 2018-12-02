@@ -5,11 +5,8 @@ import net.sf.cglib.core.DebuggingClassWriter;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
-import org.junit.Test;
 
 import java.lang.reflect.Method;
-
-import static org.junit.Assert.assertEquals;
 
 /**
  * @author xueaohui
@@ -102,7 +99,7 @@ public class CglibTest {
 //        return super.test(paramString);
 //    }
 
-    @Test
+    //@Test
     public void testBeanGenerator() throws Exception {
         BeanGenerator beanGenerator = new BeanGenerator();
         beanGenerator.addProperty("value", String.class);
@@ -111,6 +108,6 @@ public class CglibTest {
         Method setter = myBean.getClass().getMethod("setValue", String.class);
         setter.invoke(myBean, "Hello cglib!");
         Method getter = myBean.getClass().getMethod("getValue");
-        assertEquals("Hello cglib!", getter.invoke(myBean));
+        //("Hello cglib!", getter.invoke(myBean));
     }
 }

@@ -3,8 +3,7 @@ package com.wuhulala.rxjava.demo;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import org.junit.Test;
-
+import org.junit.jupiter.api.Test;
 /**
  * 0_0 o^o
  *

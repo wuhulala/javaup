@@ -1,7 +1,6 @@
 package com.wuhulala.javase.nio;
 
 import com.wuhulala.javase.UTF8Utils;
-import org.junit.Test;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -130,7 +129,7 @@ public class ServerSocketChannelUser {
         return null;
     }
 
-    @Test
+    //@Test
     public void main1() {
         Map<String, InetSocketAddress> map = new HashMap<>();
         InetSocketAddress i1 = new InetSocketAddress(9631);

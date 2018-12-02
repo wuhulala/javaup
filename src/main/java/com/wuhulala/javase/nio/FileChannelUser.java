@@ -1,7 +1,5 @@
 package com.wuhulala.javase.nio;
 
-import org.junit.Test;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -75,7 +73,7 @@ public class FileChannelUser {
         fc.close();
     }
 
-    @Test
+    //@Test
     public void testFileChannel2FileChannel() throws IOException {
         long start = System.currentTimeMillis();
 
@@ -95,7 +93,7 @@ public class FileChannelUser {
         System.out.println("花费时间 【" + (end - start) + "ms】");
     }
 
-    @Test
+   // @Test
     public void testFileChannel2BuffertoFileChannel() throws IOException {
         try(RandomAccessFile fromFile = new RandomAccessFile("D://data.txt", "rw");
         FileChannel fromChannel = fromFile.getChannel();
@@ -115,7 +113,7 @@ public class FileChannelUser {
     }
 
 
-    @Test
+   // @Test
     public void test10000F2B2F() throws IOException {
         long start = System.currentTimeMillis();
 

@@ -1,7 +1,6 @@
 package com.wuhulala.javase.time;
 
 import com.wuhulala.utils.BaseLog;
-import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,7 +19,7 @@ public class DateTimeFormat implements BaseLog {
      * Lenient => 宽容
      *
      */
-    @Test
+    //@Test
     public void testExactingDateFormat() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         //String date = "2013-23-12";

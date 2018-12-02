@@ -1,7 +1,5 @@
 package com.wuhulala.javase.classloader;
 
-import org.junit.Test;
-
 /**
  * 作甚的
  *
@@ -13,7 +11,7 @@ public class ClassDefinitionTest {
     /**
      * 测试自定义的ClassLoader
      */
-    @Test
+    //@Test
     public void testNetClassLoader() throws ClassNotFoundException {
         String classPath = "file:D:\\classloader\\classes";
         String className = "com.wuhulala.future.FutureExample";
@@ -24,7 +22,7 @@ public class ClassDefinitionTest {
     /**
      * 测试类的热部署---不同的类加载器
      */
-    @Test
+   // @Test
     public void testClassReloader() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         String classPath = "file:D:\\classloader\\classes";
         String className = "com.wuhulala.future.FutureExample";
@@ -40,7 +38,7 @@ public class ClassDefinitionTest {
     /**
      * 测试类的热部署--相同的类加载器
      */
-    @Test(expected = LinkageError.class)
+    //@Test(expected = LinkageError.class)
     public void testClassReloader2() throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         String classPath = "file:D:\\classloader\\classes";
         String className = "com.wuhulala.future.FutureExample";
@@ -54,7 +52,7 @@ public class ClassDefinitionTest {
 
     }
 
-    @Test
+   // @Test
     public void testExtAndAppClassLoaderPath(){
         System.out.println(System.getProperty("sun.boot.class.path"));
         System.out.println(System.getProperty("java.ext.dirs"));
