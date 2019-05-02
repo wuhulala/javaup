@@ -15,8 +15,11 @@ public class NormalClassLoaderTest {
         printParentClassLoader(stringClassLoader);
     }
 
-    public static void printParentClassLoader(ClassLoader cl){
-        while (cl != null){
+    public static void printParentClassLoader(ClassLoader cl) {
+        if (cl == null) {
+            System.out.println("this classloader is BootstrapClassLoader or is null !");
+        }
+        while (cl != null) {
             System.out.println(cl.getClass().getCanonicalName());
             cl = cl.getParent();
         }
