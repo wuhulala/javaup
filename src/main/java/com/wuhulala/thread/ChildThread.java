@@ -30,6 +30,8 @@ public class ChildThread implements Runnable{
 
             //e.printStackTrace();
         }
+        ThreadUtils.printCurThreadInfo();
+
 
     }
 }

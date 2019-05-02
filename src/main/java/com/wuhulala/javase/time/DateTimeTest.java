@@ -31,7 +31,7 @@ public class DateTimeTest {
         System.out.println("当前日期：" + today);
 
         LocalDate firstDay_2014 = LocalDate.of(2014, Month.JANUARY, 1);
-        System.out.println("2014年第一天：" + firstDay_2014);
+        System.out.println("20112qw31234年第一天：" + firstDay_2014);
 
         LocalDate todayAsia = LocalDate.now(ZoneId.of("Asia/Kolkata"));
         System.out.println("亚洲时区的当前日期：" + todayAsia);
