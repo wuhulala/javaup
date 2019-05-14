@@ -2,15 +2,21 @@ package com.wuhulala.javase.concurrent;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * author： wuhulala
  * date： 2017/8/24
  * version: 1.0
- * description: 倒记数器  原理实现AbstractOwnableSynchronizer
+ * description: 自定义的CountDownLatch的实现
+ * <p>可以在await的时候判断当前是否还需等待其它变量，如需等待的话就阻塞住，不然的话就运行，当其它被等待的变量自己表示完成的时候，就可以通知信号量，。</p>
+ * <p>CountDownLatch的场景可以用于 一件事情依赖于多个事情的时候。比如一个请求依赖于上几个请求的结果。</p>
+ *
+ *
  */
 public class LegacyCountDownLatchTest implements Runnable {
-    private static final LegacyCountDownLatch end = new LegacyCountDownLatch(10);
+    private static final LockCountDownLatch end = new LockCountDownLatch(10);
     private static final LegacyCountDownLatchTest test = new LegacyCountDownLatchTest();
 
     @Override
@@ -87,6 +93,57 @@ public class LegacyCountDownLatchTest implements Runnable {
             }
         }
 
+
+    }
+
+
+    /**
+     * 使用锁和Condition 模拟 CountDownLatch
+     */
+    public static class LockCountDownLatch {
+
+        private int count;
+
+        private ReentrantLock lock = new ReentrantLock();
+
+        /**
+         * Condition 模拟 Object  ({@link Object#wait() wait}, {@link Object#notify notify} and {@link Object#notifyAll notifyAll})
+         *
+         */
+        private final Condition condition = lock.newCondition();
+
+        public LockCountDownLatch(int count) {
+            this.count = count;
+        }
+
+        public void countDown() throws InterruptedException {
+            if (Thread.interrupted()){
+                throw new InterruptedException();
+            }
+            try {
+                lock.lock();
+                this.count--;
+                if (this.count == 0) {
+                    condition.signalAll();
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
+
+        public void await() throws InterruptedException {
+            if (Thread.interrupted()){
+                throw new InterruptedException();
+            }
+            try {
+                lock.lock();
+                if (this.count > 0) {
+                    condition.await();
+                }
+            } finally {
+                lock.unlock();
+            }
+        }
 
     }
 }
