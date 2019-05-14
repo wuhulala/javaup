@@ -10,14 +10,36 @@ package com.wuhulala.thread;
 public class PcThreadTest {
 
     public static void main(String[] args) {
-        Thread parent = new Thread(new ParentThread("1"));
-        //Thread child = new Thread(new ChildThread("1"));
-        parent.start();
+//        Thread parent = new Thread(new ParentThread("1"));
+//        //Thread child = new Thread(new ChildThread("1"));
+//        parent.start();
 
-        String result = createChildThread();
-        System.out.println(result);
-
-        ThreadUtils.printCurThreadInfo();
+        Thread parentThread = new Thread(() -> {
+            System.out.println("=================parent================ start");
+            Thread childThread = new Thread(() -> {
+                System.out.println(" 进入子线程..............");
+                try {
+                    Thread.sleep(100000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(" 进入父线程..............");
+            });
+            childThread.setName("childThread");
+            childThread.start();
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            System.out.println("=================parent================ end");
+        });
+        parentThread.setName("parentThread");
+        parentThread.start();
+//        String result = createChildThread();
+//        System.out.println(result);
+//
+//        ThreadUtils.printCurThreadInfo();
     }
 
     private static String createChildThread() {
