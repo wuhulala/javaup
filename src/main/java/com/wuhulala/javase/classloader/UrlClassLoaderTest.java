@@ -13,7 +13,7 @@ import java.net.URLClassLoader;
  */
 public class UrlClassLoaderTest {
     public static void main(String[] args) throws MalformedURLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-        String jarFilePath = "file:F:\\code\\javase\\java_up\\jar\\commons-beanutils-1.8.3.jar";
+        String jarFilePath = "file:D:\\study\\java_up\\jar\\commons-beanutils-1.8.3.jar";
         URL[] urls = new URL[1];
         urls[0] = new URL(jarFilePath);
         URLClassLoader classLoader = URLClassLoader.newInstance(urls);
