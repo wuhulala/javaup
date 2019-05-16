@@ -12,12 +12,12 @@ public class Calculator {
 
     public int add(int a, int b) {
         print();
-        System.out.println(String.format("%d + %d = %d -----", a, b, a + b));
+        System.out.println(String.format("%d + %d = %d ----- v2", a, b, a + b));
         return a + b;
     }
 
     public void print(){
-        System.out.println("print --- 黄龙霞 我爱你");
+        System.out.println("print");
     }
 
     public int minus(int a, int b) {

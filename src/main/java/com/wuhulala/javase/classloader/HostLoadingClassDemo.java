@@ -59,6 +59,8 @@ public class HostLoadingClassDemo {
         }
     }
 
+
+
     public static int add(int a, int b) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Object instance2 = instance();
         return (int) instance2.getClass().getMethod("add", int.class, int.class).invoke(instance2, 1, 2);
