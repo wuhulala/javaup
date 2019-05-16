@@ -33,14 +33,14 @@ public class JavaCompileUtils {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        Thread.sleep(19000);
+       // Thread.sleep(19000);
         compile("D:\\study\\javaup\\target\\classes", "D:\\study\\javaup\\src\\main\\java\\com\\wuhulala\\javase\\classloader\\test\\Calculator.java");
         // 这个时候才会去加载类，但是
         Calculator c = new Calculator();
         System.out.println(c.add(1, 3));
 
 
-        Thread.sleep(19000);
+        //Thread.sleep(19000);
         compile("D:\\study\\javaup\\target\\classes", "D:\\study\\javaup\\src\\main\\java\\com\\wuhulala\\javase\\classloader\\test\\Calculator.java");
         // 这个时候不会去加载类，所以不会发生变化，只能通过破坏双亲委派模型判断是否需要重新加载。
         Calculator c1 = new Calculator();

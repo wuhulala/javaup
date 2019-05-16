@@ -12,7 +12,7 @@ public class Calculator {
 
     public int add(int a, int b) {
         print();
-        System.out.println(String.format("%d + %d = %d ----- v2", a, b, a + b));
+        System.out.println(String.format("%d + %d = %d ----- v3", a, b, a + b));
         return a + b;
     }
 

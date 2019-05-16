@@ -1,5 +1,7 @@
 package com.wuhulala.javase.classloader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
@@ -39,6 +41,29 @@ public class HostLoadingClassDemo {
     public static void startAdder() {
         ThreadPoolExecutor poolExecutor = new ScheduledThreadPoolExecutor(1);
         ((ScheduledThreadPoolExecutor) poolExecutor).scheduleAtFixedRate(new ScheduledAdder(), 0, 3, TimeUnit.SECONDS);
+        ThreadPoolExecutor poolExecutor2 = new ScheduledThreadPoolExecutor(1);
+        ((ScheduledThreadPoolExecutor) poolExecutor2).scheduleAtFixedRate(new DynamicClassDetection(), 0, 3, TimeUnit.SECONDS);
+    }
+
+    public static class DynamicClassDetection implements Runnable {
+
+        private static final Logger logger = LoggerFactory.getLogger(DynamicClassDetection.class);
+
+        @Override
+        public void run() {
+            try {
+                if (isChange("")) {
+                    JavaCompileUtils.compile("D:\\study\\javaup\\target\\classes", "D:\\study\\javaup\\src\\main\\java\\com\\wuhulala\\javase\\classloader\\test\\Calculator.java");;
+                }
+                //
+            } catch (Exception e){
+                logger.error("检测失败", e);
+            }
+        }
+
+        private boolean isChange(String fileName) {
+            return true;
+        }
     }
 
     public static class ScheduledAdder implements Runnable {
