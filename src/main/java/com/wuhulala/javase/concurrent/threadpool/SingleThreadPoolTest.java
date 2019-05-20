@@ -14,6 +14,7 @@ public class SingleThreadPoolTest {
     public static void main(String[] args) {
 
 
+        System.out.println(Runtime.getRuntime().availableProcessors());
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         try {

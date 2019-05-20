@@ -19,9 +19,10 @@ public class ThreadPoolExecutorTest {
     ///////////////////////////// 方法区 ////////////////////////////////////
     public static void main(String[] args) {
         int coreSize = 10;
-        int maxSize = 100;
+        int maxSize = 0x7FFFFFFF;
+        System.out.println(maxSize);
         int queue = 10;
-        int alive = 10 * 1000;
+        int alive = 0;
         ThreadPoolExecutor tpe = new ThreadPoolExecutor(coreSize,
                 maxSize, alive, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<>(queue),
@@ -31,6 +32,8 @@ public class ThreadPoolExecutorTest {
         for (int i = 0; i < 100; i++) {
             tpe.execute(new NameRunnable("thread:::" + i));
         }
+
+
     }
 
     public static class NameRunnable implements Runnable {
