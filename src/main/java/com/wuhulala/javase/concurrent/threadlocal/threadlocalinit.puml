@@ -1,0 +1,13 @@
+@startuml
+ThreadLocalContext -> ThreadLocalContext: 调用工具类的getInstance
+ThreadLocalContext -> ThreadLocal: get初始化ThreadLocal的值
+ThreadLocal -> Thread: 获取当前线程的threadLocals属性，如果没有，进入下一步初始化
+Thread --> ThreadLocal: 获取当前线程的threadLocals，如果没有，进入下一步初始化
+ThreadLocal -> END: 如果不为空结束
+
+ThreadLocal -> ThreadLocal: setInitialValue 设置初始值
+ThreadLocal -> SuppliedThreadLocal: initialValue 调用初始化时的配置
+SuppliedThreadLocal -> Supplier: 调用初始化时配置的提供者
+Supplier -> END: 结束
+
+@enduml
