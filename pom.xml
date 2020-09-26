@@ -11,6 +11,9 @@
     <modules>
         <module>composite-source</module>
         <module>java-serialization</module>
+        <module>dbpool</module>
+        <module>druid</module>
+        <module>tomcatpool</module>
     </modules>
 
     <properties>
