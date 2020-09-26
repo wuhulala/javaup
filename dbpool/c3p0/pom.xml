@@ -10,16 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.wuhulala.dbpool</groupId>
-    <artifactId>druid</artifactId>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid</artifactId>
-            <version>1.1.24</version>
-        </dependency>
-
-    </dependencies>
+    <artifactId>c3p0</artifactId>
 
 
 </project>

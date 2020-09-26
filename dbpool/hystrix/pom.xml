@@ -12,5 +12,14 @@
     <groupId>com.wuhulala.dnpool</groupId>
     <artifactId>hystrix</artifactId>
 
+    <dependencies>
+        <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.4.5</version>
+        </dependency>
+    </dependencies>
+
 
 </project>

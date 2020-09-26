@@ -16,7 +16,16 @@
         <module>tomcatpool</module>
         <module>hystrix</module>
         <module>commonspool</module>
+        <module>c3p0</module>
     </modules>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.200</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
